@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -13,6 +14,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class JFrameExamen extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -21,12 +30,14 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private Image dbImage;	// Imagen a proyectar	
     private Graphics dbg;	// Objeto grafico
     private SoundClip sonido;    // Objeto AudioClip
-    private SoundClip bomb;    //Objeto AudioClip 
+    private SoundClip bomb;    //Objeto AudioClip
+    private SoundClip payaso;
     private Bueno link;    // Objeto de la clase Elefante
     private Malo armadura;   //Objeto de la clase Raton
     private LinkedList lista;           //lista de ratones
     private int cant;               //cantidad de asteroides
     private boolean presionado;     //Boleano que controla si el bot´´oon está siendo presionado
+    private boolean musicafondo;
     private int coordenada_x;
     private int coordenada_y;
     private int off_x;              //Coordenada para ajustar la imagen con click
@@ -46,6 +57,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private boolean move;
     private boolean pausa;
     private long tiempoActual;
+    
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -63,6 +75,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         setSize(800, 500);
         pausa = false;
         move = false;
+        musicafondo= false;
         direccion = 0;
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
@@ -77,6 +90,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         bomb = new SoundClip("sounds/Explosion.wav");
         sonido = new SoundClip("sounds/boom.wav");
+        payaso = new SoundClip("sounds/pashaso.wav");
 
         URL eURL = this.getClass().getResource("bueno/link1.png");
         link = new Bueno(posX, posY);
@@ -174,6 +188,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      */
     public void start() {
         // Declaras un hilo
+        payaso.setLooping(true);
+        payaso.play();
         Thread th = new Thread(this);
         // Empieza el hilo
         th.start();
@@ -347,6 +363,14 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         } else if (e.getKeyCode() == KeyEvent.VK_P) {
             pausa = !pausa;
+
+        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+
+            direccion = 3;
+
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+
+            direccion = 4;
 
         }
         move = true;

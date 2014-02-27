@@ -10,6 +10,7 @@ package jframeexamen;
  *
  * @author Carlos
  */
+//Holitos.
  public class Main {
  	public static void main(String[] args){
  		JFrameExamen algo = new JFrameExamen();

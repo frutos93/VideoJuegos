@@ -68,7 +68,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private double tiempo;
     private boolean puedoDisparar;
     private int angulo;
-    
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -82,11 +81,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     }
 
     public void init() {
-        nombreArchivo= "datos.txt";
+        nombreArchivo = "datos.txt";
         setSize(800, 500);
         pausa = false;
         move = false;
-        musicafondo= false;
+        musicafondo = false;
         direccion = 0;
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
@@ -96,8 +95,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         y_mayor = -100;          //posicion máxima en y que tendrán los asteroides
         y_menor = -200;        //posicion mínima en y que tendrán los asteroides
         flag = false;
-        int posY = getHeight()/2;             // posicion inicial del planeta en y
-
+        int posY = getHeight() / 2;             // posicion inicial del planeta en y
 
         bomb = new SoundClip("sounds/Explosion.wav");
         sonido = new SoundClip("sounds/boom.wav");
@@ -118,9 +116,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         //bomb = getAudioClip(baURL);
         z = 290;
         z0 = 0;
-        angulo= 45;
-        
-        velocidadInicial=(int)(Math.random()*108+10);
+        angulo = 45;
+
+        velocidadInicial = (int) (Math.random() * 108 + 10);
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -154,15 +152,14 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void run() {
         tiempoActual = System.currentTimeMillis();
         while (vidas > 0) {
-            if(musicafondo){
-            payaso.stop();
-            payaso.setLooping(false);
-            }
-            else{
-                if(!payaso.getLooping()){
+            if (musicafondo) {
+                payaso.stop();
+                payaso.setLooping(false);
+            } else {
+                if (!payaso.getLooping()) {
                     payaso.setLooping(true);
                     payaso.play();
-                        }
+                }
             }
             if (!pausa) {
                 actualiza();
@@ -192,32 +189,31 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         double incrementoTiempo = 0.05;
         tiempo += incrementoTiempo;    //actualizar el tiempo y la nueva posicion.
 
-        if(puedoDisparar){
-            link.setPosX((int)x);
-            link.setPosY((int)z);
-        //se aplica la fórmula x= v0.cosθ.t
-        x = vx0 *Math.cos(Math.toRadians(angulo))* tiempo;
-        //posicionamos el proyectil respecto a sus coordenadas iniciales.
-        x = x + 10;
-        double a = -9.81;
-        //se aplica la fórmula y(t)=v0 . sen θ . t - .5 g t2.
-        z =  vz0 * Math.sin(Math.toRadians(angulo)) * tiempo + 0.5 * a * tiempo * tiempo;
-        //posicionamos el proyectil respecto a sus coordenadas iniciales.
-        z = 300 - z;
+        if (puedoDisparar) {
+            link.setPosX((int) x);
+            link.setPosY((int) z);
+            //se aplica la fórmula x= v0.cosθ.t
+            x = vx0 * Math.cos(Math.toRadians(angulo)) * tiempo;
+            //posicionamos el proyectil respecto a sus coordenadas iniciales.
+            x = x + 10;
+            double a = -9.81;
+            //se aplica la fórmula y(t)=v0 . sen θ . t - .5 g t2.
+            z = vz0 * Math.sin(Math.toRadians(angulo)) * tiempo + 0.5 * a * tiempo * tiempo;
+            //posicionamos el proyectil respecto a sus coordenadas iniciales.
+            z = 300 - z;
 
-        }
-        else{
-         z = 290;
-        z0 = 0;
-        angulo= 45;
-        velocidadInicial=(int)(Math.random()*108+10);
-        //se aplica la fórmula v0=v0.senθ
-        vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
-        //se aplica la fórmula v0=v0.cosθ
-        vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
-        x = 10;
-        x0 = 0;
-        tiempo = 0;
+        } else {
+            z = 290;
+            z0 = 0;
+            angulo = 45;
+            velocidadInicial = (int) (Math.random() * 108 + 10);
+            //se aplica la fórmula v0=v0.senθ
+            vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
+            //se aplica la fórmula v0=v0.cosθ
+            vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
+            x = 10;
+            x0 = 0;
+            tiempo = 0;
         }
 
     }
@@ -234,7 +230,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         if (link.getPosY() + link.getAlto() > getHeight()) {
             link.setPosY(getHeight() - link.getAlto());
-            puedoDisparar=false;
+            puedoDisparar = false;
             link.setPosX(0);
             link.setPosY(290);
         }
@@ -246,7 +242,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         if (link.getPosX() + link.getAncho() > getWidth()) {
             link.setPosX(getWidth() - link.getAncho());
         }
-
 
     }
 
@@ -297,20 +292,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         } else if (e.getKeyCode() == KeyEvent.VK_P) {
             pausa = !pausa;
 
-        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-
-            direccion = 3;
-
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-
-            direccion = 4;
-
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
-            if(!musicafondo){
-                musicafondo=true;
-            }
-            else{
-                musicafondo=false;
+            if (!musicafondo) {
+                musicafondo = true;
+            } else {
+                musicafondo = false;
             }
 
         }
@@ -332,13 +318,13 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     }
 
     public void mouseClicked(MouseEvent e) {
-        if(!puedoDisparar){
-         if (link.contiene(e.getX(), e.getY()) ) {
-            puedoDisparar = true;
+        if (!puedoDisparar) {
+            if (link.contiene(e.getX(), e.getY())) {
+                puedoDisparar = true;
+            }
         }
-        }
-        
-        }
+
+    }
 
     public void mouseEntered(MouseEvent e) {
 
@@ -391,7 +377,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      */
     public void paint1(Graphics g) {
         if (vidas > 0) {
-            if (link != null){
+            if (link != null) {
                 g.drawImage(link.getImagenI(), link.getPosX(), link.getPosY(), this);
                 g.setColor(Color.white);
                 g.drawString("Puntos = " + score, 20, 20);
@@ -411,12 +397,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     }
 }
 
-
-    /**
-     * Metodo que agrega la informacion del vector al archivo.
-     *
-     * @throws IOException
-     */
+/**
+ * Metodo que agrega la informacion del vector al archivo.
+ *
+ * @throws IOException
+ */
 //public void grabaArchivo() {
 //                                                          
 //         try {

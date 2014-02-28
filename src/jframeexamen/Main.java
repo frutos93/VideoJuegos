@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jframeexamen;
 
 /**
@@ -11,10 +10,11 @@ package jframeexamen;
  * @author Carlos
  */
 //Holitos.
- public class Main {
- 	public static void main(String[] args){
- 		JFrameExamen algo = new JFrameExamen();
- 		algo.setVisible(true);
-                
- 	}
- }
+public class Main {
+
+    public static void main(String[] args) {
+        JFrameExamen algo = new JFrameExamen();
+        algo.setVisible(true);
+
+    }
+}

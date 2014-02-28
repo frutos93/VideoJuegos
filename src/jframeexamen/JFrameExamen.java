@@ -105,7 +105,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         link = new Bueno(0, 290);
         
         URL aURL= this.getClass().getResource("malo/mano1.png");
-
+        mano = new Malo(getWidth()/2,getHeight()/2);
+        
         setBackground(Color.black);
         addKeyListener(this);
         addMouseListener(this);
@@ -119,7 +120,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z = 290;
         z0 = 0;
         angulo = 45;
-        velocidadInicial=(int)(Math.random()*(105-10)+1);
+        velocidadInicial=(int)(Math.random()*(105-30)+1);
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -187,6 +188,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
         tiempoActual += tiempoTranscurrido;
         link.actualiza(tiempoTranscurrido);
+        mano.actualiza(tiempoTranscurrido);
         double incrementoTiempo = 0.05;
         tiempo += incrementoTiempo;    //actualizar el tiempo y la nueva posicion.
 
@@ -207,7 +209,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             z = 290;
             z0 = 0;
             angulo = 45;
-            velocidadInicial=(int)(Math.random()*(105-10)+1);
+            velocidadInicial=(int)(Math.random()*(105-30)+1);
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
             //se aplica la fórmula v0=v0.cosθ
@@ -378,8 +380,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      */
     public void paint1(Graphics g) {
         if (vidas > 0) {
-            if (link != null) {
+            if (link != null && mano!= null ) {
                 g.drawImage(link.getImagenI(), link.getPosX(), link.getPosY(), this);
+                g.drawImage(mano.getImagenI(), mano.getPosX(), mano.getPosY(), this);
                 g.setColor(Color.white);
                 g.drawString("Puntos = " + score, 20, 20);
                 g.drawString("Vidas = " + vidas, 20, 50);

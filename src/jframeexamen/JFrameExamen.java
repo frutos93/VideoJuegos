@@ -105,7 +105,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         link = new Bueno(0, 290);
         
         URL aURL= this.getClass().getResource("malo/mano1.png");
-        mano = new Malo(getWidth()/2,getHeight()/2);
+        mano = new Malo(getWidth()/2,getHeight()-55);
         
         setBackground(Color.black);
         addKeyListener(this);
@@ -218,6 +218,19 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             x0 = 0;
             tiempo = 0;
         }
+   if (move) {
+            switch (direccion) {
+                case 3: {
+                    mano.setPosX(mano.getPosX() - 3);
+                    break; //se mueve hacia la izquierda
+                }
+                case 4: {
+
+                    mano.setPosX(mano.getPosX() + 3);
+                    break; //se mueve hacia la derecha
+                }
+            }
+        }
 
     }
 
@@ -232,7 +245,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         }
 
         if (link.getPosY() + link.getAlto() > getHeight()) {
-            link.setPosY(getHeight() - link.getAlto());
+            link.setPosY(getHeight()/2);
             puedoDisparar = false;
             link.setPosX(0);
             link.setPosY(290);
@@ -245,6 +258,27 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         if (link.getPosX() + link.getAncho() > getWidth()) {
             link.setPosX(getWidth() - link.getAncho());
         }
+       if (mano.getPosX() < 0) {
+            mano.setPosX(0);
+        }
+       if (mano.getPosX() + mano.getAncho() > getWidth()) {
+            mano.setPosX(getWidth() - mano.getAncho());
+        }
+       
+       
+            if (mano.intersecta(link) && !(mano.intersec(link))) {
+                flag = true;
+
+            } else if (!(mano.intersecta(link)) && flag) {
+                flag = false;
+
+            } else if (!(flag) && mano.intersec(link)) {
+                link.setPosY(getHeight()/2);
+                puedoDisparar = false;
+                link.setPosX(0);
+                link.setPosY(290);
+
+            }
 
     }
 
@@ -286,7 +320,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void keyPressed(KeyEvent e) {
 
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-
             direccion = 3;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 
@@ -318,6 +351,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      * convierte en falsa.
      */
     public void keyReleased(KeyEvent e) {
+            move = false;
     }
 
     public void mouseClicked(MouseEvent e) {

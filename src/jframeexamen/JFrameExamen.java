@@ -104,7 +104,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         payaso = new SoundClip("sounds/pashaso.wav");
 
         URL eURL = this.getClass().getResource("bueno/link1.png");
-        link = new Bueno(0, posY);
+        link = new Bueno(0, 290);
 
         setBackground(Color.black);
         addKeyListener(this);
@@ -119,7 +119,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z = 290;
         z0 = 0;
         angulo= 45;
-        velocidadInicial= 80;
+        
+        velocidadInicial=(int)(Math.random()*108+10);
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -191,23 +192,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         double incrementoTiempo = 0.05;
         tiempo += incrementoTiempo;    //actualizar el tiempo y la nueva posicion.
 
-        if (move) {
-            switch (direccion) {
-                case 3: {
-
-                    link.setPosX(link.getPosX() - 2);
-                    break; //se mueve hacia la izquierda
-                }
-                case 4: {
-
-                    link.setPosX(link.getPosX() + 2);
-                    break; //se mueve hacia la derecha
-                }
-            }
-        }
-
         if(puedoDisparar){
-
+            link.setPosX((int)x);
+            link.setPosY((int)z);
         //se aplica la fórmula x= v0.cosθ.t
         x = vx0 *Math.cos(Math.toRadians(angulo))* tiempo;
         //posicionamos el proyectil respecto a sus coordenadas iniciales.
@@ -217,8 +204,20 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z =  vz0 * Math.sin(Math.toRadians(angulo)) * tiempo + 0.5 * a * tiempo * tiempo;
         //posicionamos el proyectil respecto a sus coordenadas iniciales.
         z = 300 - z;
-            link.setPosX((int)x);
-            link.setPosY((int)z);
+
+        }
+        else{
+         z = 290;
+        z0 = 0;
+        angulo= 45;
+        velocidadInicial=(int)(Math.random()*108+10);
+        //se aplica la fórmula v0=v0.senθ
+        vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
+        //se aplica la fórmula v0=v0.cosθ
+        vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
+        x = 10;
+        x0 = 0;
+        tiempo = 0;
         }
 
     }
@@ -235,6 +234,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         if (link.getPosY() + link.getAlto() > getHeight()) {
             link.setPosY(getHeight() - link.getAlto());
+            puedoDisparar=false;
+            link.setPosX(0);
+            link.setPosY(290);
         }
 
         if (link.getPosX() < 0) {
@@ -327,7 +329,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      * convierte en falsa.
      */
     public void keyReleased(KeyEvent e) {
-        move = false;
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -365,7 +366,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      * está siendo presionadao.
      */
     public void mouseReleased(MouseEvent e) {
-        presionado = false;
     }
 
     public void mouseMoved(MouseEvent e) {
@@ -379,11 +379,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      * sido arrastrado el mouse
      */
     public void mouseDragged(MouseEvent e) {
-
-        if (presionado) {
-            coordenada_x = e.getX();
-            coordenada_y = e.getY();
-        }
     }
 
     /**
@@ -396,7 +391,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      */
     public void paint1(Graphics g) {
         if (vidas > 0) {
-            if (link != null && lista != null) {
+            if (link != null){
                 g.drawImage(link.getImagenI(), link.getPosX(), link.getPosY(), this);
                 g.setColor(Color.white);
                 g.drawString("Puntos = " + score, 20, 20);

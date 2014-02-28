@@ -100,6 +100,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z = 290;
         z0 = 0;
         angulo= 45;
+        velocidadInicial= 80;
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -158,7 +159,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             else{
                 if(!payaso.getLooping()){
                     payaso.setLooping(true);
-                payaso.play();
+                    payaso.play();
                         }
             }
             if (!pausa) {

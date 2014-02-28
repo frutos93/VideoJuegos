@@ -99,6 +99,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         int posY = getHeight()/2;             // posicion inicial del planeta en y
         z = 290;
         z0 = 0;
+        angulo= 45;
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -185,6 +186,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
         tiempoActual += tiempoTranscurrido;
         link.actualiza(tiempoTranscurrido);
+        double incrementoTiempo = 0.05;
+        tiempo += incrementoTiempo;    //actualizar el tiempo y la nueva posicion.
 
         if (move) {
             switch (direccion) {
@@ -201,30 +204,17 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             }
         }
 
-        if (presionado) {                              //si la imagen sigue presionda, se actualizan las posiciones de x y de y
-            link.setPosY(coordenada_y - off_y);
-            link.setPosX(coordenada_x - off_x);
-
-        }
-        
-        //actualizar el tiempo y la nueva posicion.
-        double incrementoTiempo = 0.05;
-        tiempo += incrementoTiempo;
+        if(puedoDisparar){
 
         //se aplica la fórmula x= v0.cosθ.t
         x = vx0 *Math.cos(Math.toRadians(angulo))* tiempo;
         //posicionamos el proyectil respecto a sus coordenadas iniciales.
         x = x + 10;
-
         double a = -9.81;
         //se aplica la fórmula y(t)=v0 . sen θ . t - .5 g t2.
         z =  vz0 * Math.sin(Math.toRadians(angulo)) * tiempo + 0.5 * a * tiempo * tiempo;
         //posicionamos el proyectil respecto a sus coordenadas iniciales.
-        z = 290 - z;
-
-    
-
-        if(puedoDisparar){
+        z = 300 - z;
             link.setPosX((int)x);
             link.setPosY((int)z);
         }
@@ -341,14 +331,10 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void mouseClicked(MouseEvent e) {
         if(!puedoDisparar){
          if (link.contiene(e.getX(), e.getY()) ) {
-            coordenada_x = e.getX();
-            coordenada_y = e.getY();
-            off_x = e.getX() - link.getPosX();
-            off_y = e.getY() - link.getPosY();
             puedoDisparar = true;
         }
-
         }
+        
         }
 
     public void mouseEntered(MouseEvent e) {

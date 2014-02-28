@@ -33,7 +33,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private SoundClip bomb;    //Objeto AudioClip
     private SoundClip payaso;
     private Bueno link;    // Objeto de la clase Elefante
-    private Malo armadura;   //Objeto de la clase Raton
+    private Malo mano;   //Objeto de la clase Raton
     private LinkedList lista;           //lista de ratones
     private int cant;               //cantidad de asteroides
     private boolean presionado;     //Boleano que controla si el bot´´oon está siendo presionado
@@ -103,6 +103,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         URL eURL = this.getClass().getResource("bueno/link1.png");
         link = new Bueno(0, 290);
+        
+        URL aURL= this.getClass().getResource("malo/mano1.png");
 
         setBackground(Color.black);
         addKeyListener(this);
@@ -117,8 +119,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z = 290;
         z0 = 0;
         angulo = 45;
-
-        velocidadInicial = (int) (Math.random() * 108 + 10);
+        velocidadInicial=(int)(Math.random()*(105-10)+1);
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -206,7 +207,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             z = 290;
             z0 = 0;
             angulo = 45;
-            velocidadInicial = (int) (Math.random() * 108 + 10);
+            velocidadInicial=(int)(Math.random()*(105-10)+1);
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
             //se aplica la fórmula v0=v0.cosθ

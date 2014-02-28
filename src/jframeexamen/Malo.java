@@ -4,36 +4,38 @@ package jframeexamen;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-public class Malo extends Base {
+      import java.awt.Image;
+      import java.awt.Toolkit;
 
-    private static int conteo;
-    private int speed;
-
-    public Malo(int posX, int posY) {
-        super(posX, posY);
-        Image malo1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/armor1.png"));
-        Image malo2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/armor2.png"));
+    public class Malo extends Base{
+        
+    public Malo(int posX,int posY){
+	super(posX,posY);	
+        Image malo1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/mano1.png"));
+        Image malo2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/mano2.png"));
+        Image malo3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/mano3.png"));
+        Image malo4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/mano4.png"));
+        Image malo5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/mano5.png"));
+        Image malo6 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("malo/mano6.png"));
         animacion = new Animacion();
         animacion.sumaCuadro(malo1, 100);
         animacion.sumaCuadro(malo2, 100);
-        speed = (int) ((Math.random() * (6))+ 3);
+        animacion.sumaCuadro(malo3, 100);
+        animacion.sumaCuadro(malo4, 100);
+        animacion.sumaCuadro(malo5, 100);
+        animacion.sumaCuadro(malo2, 100);
+        
+	}
+    
+    private static final String PAUSADO = "PAUSADO";
+    private static final String DESAPARECE = "DESAPARECE";
+    
+    public static String getPausado(){
+        return PAUSADO;
     }
     
-
-    public static int getConteo() {
-        return conteo;
+    public static String getDesaparece(){
+        return DESAPARECE;
     }
-
-    public static void setConteo(int cont) {
-        conteo = cont;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int vel) {
-        speed = vel;
-    }
+    
 }
-

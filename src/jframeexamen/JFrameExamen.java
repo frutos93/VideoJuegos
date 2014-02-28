@@ -97,18 +97,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         y_menor = -200;        //posicion mínima en y que tendrán los asteroides
         flag = false;
         int posY = getHeight()/2;             // posicion inicial del planeta en y
-        z = 290;
-        z0 = 0;
-        angulo= 45;
-        velocidadInicial= 80;
-        //se aplica la fórmula v0=v0.senθ
-        vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
-        //se aplica la fórmula v0=v0.cosθ
-        vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
-        x = 10;
-        x0 = 0;
-        tiempo = 0;
-        puedoDisparar = false;
+
 
         bomb = new SoundClip("sounds/Explosion.wav");
         sonido = new SoundClip("sounds/boom.wav");
@@ -127,6 +116,18 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         //sonido = getAudioClip(beURL);
         //URL baURL = this.getClass().getResource("sounds/Explosion.wav");
         //bomb = getAudioClip(baURL);
+        z = 290;
+        z0 = 0;
+        angulo= 45;
+        velocidadInicial= 80;
+        //se aplica la fórmula v0=v0.senθ
+        vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
+        //se aplica la fórmula v0=v0.cosθ
+        vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
+        x = 10;
+        x0 = 0;
+        tiempo = 0;
+        puedoDisparar = false;
         lista = new LinkedList();
         URL goURL = this.getClass().getResource("malo/gameover.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);

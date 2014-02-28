@@ -57,6 +57,17 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private boolean move;
     private boolean pausa;
     private long tiempoActual;
+    private String nombreArchivo;
+    private double z; //posición y
+    private double z0; //posición y inicial
+    private double vz0; //velocidad y inicial;
+    private double x;// posición x;
+    private double x0; //posicion x inicial;
+    private double vx0; //velocidad x inicial ;
+    private double velocidadInicial;
+    private double tiempo;
+    private boolean puedoDisparar;
+    private int angulo;
     
 
     /**
@@ -71,7 +82,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     }
 
     public void init() {
-
+        nombreArchivo= "datos.txt";
         setSize(800, 500);
         pausa = false;
         move = false;
@@ -85,15 +96,24 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         y_mayor = -100;          //posicion máxima en y que tendrán los asteroides
         y_menor = -200;        //posicion mínima en y que tendrán los asteroides
         flag = false;
-        int posX = getWidth() / 2;              // posicion inicial del planeta en x
-        int posY = getHeight();             // posicion inicial del planeta en y
+        int posY = getHeight()/2;             // posicion inicial del planeta en y
+        z = 290;
+        z0 = 0;
+        //se aplica la fórmula v0=v0.senθ
+        vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
+        //se aplica la fórmula v0=v0.cosθ
+        vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
+        x = 10;
+        x0 = 0;
+        tiempo = 0;
+        puedoDisparar = false;
 
         bomb = new SoundClip("sounds/Explosion.wav");
         sonido = new SoundClip("sounds/boom.wav");
         payaso = new SoundClip("sounds/pashaso.wav");
 
         URL eURL = this.getClass().getResource("bueno/link1.png");
-        link = new Bueno(posX, posY);
+        link = new Bueno(0, posY);
 
         setBackground(Color.black);
         addKeyListener(this);
@@ -106,74 +126,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         //URL baURL = this.getClass().getResource("sounds/Explosion.wav");
         //bomb = getAudioClip(baURL);
         lista = new LinkedList();
-
-        cant = (int) (Math.random() * 3 + 1);           //se crea la cantidad de asteroides al azar
-        switch (cant) {
-            case 1:
-                for (int i = 1; i <= 6; i++) {
-                    if (i <= 3) {
-                        posrX = -400;    //se generarán los asteroides en posiciones aleatorias fuera del applet
-                        posrY = ((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-                        URL rURL = this.getClass().getResource("malo/armor1.png");
-                        armadura = new Malo(posrX, posrY);
-                        armadura.setPosX(posrX);
-                        armadura.setPosY(posrY);
-                        lista.add(armadura);
-                    } else {
-                        posrX = ((int) (Math.random() * (getWidth() / 4)) + getWidth());
-                        posrY = ((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-                        URL rURL = this.getClass().getResource("malo/armor1.png");
-                        armadura = new Malo(posrX, posrY);
-                        armadura.setPosX(posrX);
-                        armadura.setPosY(posrY);
-                        lista.add(armadura);
-                    }
-                }
-                break;
-            case 2:
-                for (int i = 1; i <= 10; i++) {
-                    if (i <= 5) {
-                        posrX = -400;
-                        posrY = ((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-                        URL rURL = this.getClass().getResource("malo/armor1.png");
-                        armadura = new Malo(posrX, posrY);
-                        armadura.setPosX(posrX);
-                        armadura.setPosY(posrY);
-                        lista.add(armadura);
-                    } else {
-                        posrX = ((int) (Math.random() * (getWidth() / 4)) + getWidth());
-                        posrY = ((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-                        URL rURL = this.getClass().getResource("malo/armor1.png");
-                        armadura = new Malo(posrX, posrY);
-                        armadura.setPosX(posrX);
-                        armadura.setPosY(posrY);
-                        lista.add(armadura);
-                    }
-                }
-                break;
-            case 3:
-                for (int i = 1; i <= 12; i++) {
-                    if (i <= 6) {
-                        posrX = -400;
-                        posrY = ((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-                        URL rURL = this.getClass().getResource("malo/armor1.png");
-                        armadura = new Malo(posrX, posrY);
-                        armadura.setPosX(posrX);
-                        armadura.setPosY(posrY);
-                        lista.add(armadura);
-                    } else {
-                        posrX = ((int) (Math.random() * (getWidth() / 4)) + getWidth());
-                        posrY = ((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-                        URL rURL = this.getClass().getResource("malo/armor1.png");
-                        armadura = new Malo(posrX, posrY);
-                        armadura.setPosX(posrX);
-                        armadura.setPosY(posrY);
-                        lista.add(armadura);
-                    }
-                }
-                break;
-        }
-
         URL goURL = this.getClass().getResource("malo/gameover.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
 
@@ -198,6 +150,16 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void run() {
         tiempoActual = System.currentTimeMillis();
         while (vidas > 0) {
+            if(musicafondo){
+            payaso.stop();
+            payaso.setLooping(false);
+            }
+            else{
+                if(!payaso.getLooping()){
+                    payaso.setLooping(true);
+                payaso.play();
+                        }
+            }
             if (!pausa) {
                 actualiza();
                 checaColision();
@@ -223,7 +185,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
         tiempoActual += tiempoTranscurrido;
         link.actualiza(tiempoTranscurrido);
-        armadura.actualiza(tiempoTranscurrido);
 
         if (move) {
             switch (direccion) {
@@ -245,14 +206,27 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             link.setPosX(coordenada_x - off_x);
 
         }
-        for (int i = 0; i < lista.size(); i++) {
-            Malo asteroide = (Malo) lista.get(i);
-            if (i <= (lista.size() / 2)) {
-                asteroide.setPosX(asteroide.getPosX() + asteroide.getSpeed());
-            } else {
-                asteroide.setPosX(asteroide.getPosX() - asteroide.getSpeed());
-            }
+        
+        //actualizar el tiempo y la nueva posicion.
+        double incrementoTiempo = 0.05;
+        tiempo += incrementoTiempo;
 
+        //se aplica la fórmula x= v0.cosθ.t
+        x = vx0 *Math.cos(Math.toRadians(angulo))* tiempo;
+        //posicionamos el proyectil respecto a sus coordenadas iniciales.
+        x = x + 10;
+
+        double a = -9.81;
+        //se aplica la fórmula y(t)=v0 . sen θ . t - .5 g t2.
+        z =  vz0 * Math.sin(Math.toRadians(angulo)) * tiempo + 0.5 * a * tiempo * tiempo;
+        //posicionamos el proyectil respecto a sus coordenadas iniciales.
+        z = 290 - z;
+
+    
+
+        if(puedoDisparar){
+            link.setPosX((int)x);
+            link.setPosY((int)z);
         }
 
     }
@@ -279,43 +253,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             link.setPosX(getWidth() - link.getAncho());
         }
 
-        for (int i = 0; i < lista.size(); i++) {
-            Malo asteroide = (Malo) lista.get(i);
-            if ((i + 1) <= (lista.size() + 1) / 2) {
-                if (asteroide.getPosX() > getWidth() + asteroide.getAncho()) {
-                    sonido.play();
-                    asteroide.setPosX(-300);
-                    asteroide.setPosY((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
 
-                }
-
-            } else{
-                if(asteroide.getPosX() + asteroide.getAncho() <0) {
-                sonido.play();
-                asteroide.setPosX((int) (Math.random() * (getWidth() / 4)) + getWidth());
-                asteroide.setPosY((int) (Math.random() * (getHeight() / 10 * 9)) + getHeight() / 10);
-            }
-            }
-        }
-
-        for (int i = 0; i < lista.size(); i++) {
-            Malo asteroide = (Malo) lista.get(i);
-
-            if (link.intersecta(asteroide) && !(link.intersec(asteroide))) {
-                flag = true;
-
-            } else if (!(link.intersecta(asteroide)) && flag) {
-                flag = false;
-
-            } else if (!(flag) && link.intersec(asteroide)) {
-                bomb.play();
-                score += 100;
-                asteroide.setPosX(((int) (Math.random() * (x_mayor - x_menor))) + x_menor);
-                asteroide.setPosY(((int) (Math.random() * (y_mayor - y_menor))) + y_menor);
-
-            }
-
-        }
     }
 
     /**
@@ -342,6 +280,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         // Dibuja la imagen actualizada
         g.drawImage(dbImage, 0, 0, this);
+
     }
 
     /**
@@ -372,6 +311,14 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
             direccion = 4;
 
+        } else if (e.getKeyCode() == KeyEvent.VK_S) {
+            if(!musicafondo){
+                musicafondo=true;
+            }
+            else{
+                musicafondo=false;
+            }
+
         }
         move = true;
 
@@ -392,8 +339,17 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     }
 
     public void mouseClicked(MouseEvent e) {
+        if(!puedoDisparar){
+         if (link.contiene(e.getX(), e.getY()) ) {
+            coordenada_x = e.getX();
+            coordenada_y = e.getY();
+            off_x = e.getX() - link.getPosX();
+            off_y = e.getY() - link.getPosY();
+            puedoDisparar = true;
+        }
 
-    }
+        }
+        }
 
     public void mouseEntered(MouseEvent e) {
 
@@ -411,14 +367,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      * 'y' para ajustar el desfase que puede tener la imagen con el click
      */
     public void mousePressed(MouseEvent e) {
-
-        if (link.contiene(e.getX(), e.getY()) & !presionado) {
-            coordenada_x = e.getX();
-            coordenada_y = e.getY();
-            off_x = e.getX() - link.getPosX();
-            off_y = e.getY() - link.getPosY();
-            presionado = true;
-        }
     }
 
     /**
@@ -469,12 +417,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                     g.setColor(Color.white);
                     g.drawString(link.getPausado(), link.getPosX() + link.getAncho() / 3, link.getPosY() + link.getAlto() / 2);
                 }
-
-                for (int i = 0; i < lista.size(); i++) {
-                    Malo asteroide = (Malo) lista.get(i);
-                    g.drawImage(asteroide.getImagenI(), asteroide.getPosX(), asteroide.getPosY(), this);
-                }
-
             } else {
                 //Da un mensaje mientras se carga el dibujo	
                 g.drawString("No se cargo la imagen..", 20, 20);
@@ -484,5 +426,28 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             g.drawImage(game_over, getWidth() / 5, 0, this);
         }
     }
-
 }
+
+
+    /**
+     * Metodo que agrega la informacion del vector al archivo.
+     *
+     * @throws IOException
+     */
+//public void grabaArchivo() {
+//                                                          
+//         try {
+//                PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo),false);
+//                /*for (int i = 0; i < vec.size(); i++) {
+//
+//                    Puntaje x;
+//                    x = (Puntaje) vec.get(i);*/
+//                    fileOut.println(""+velocidadx +","+velocidady+","+angulo+ ","+tiempo+","+vidas);
+//                
+//                fileOut.close();
+//         }
+//         catch (IOException ioe) {
+//             System.out.println(" Se obtuvo error al grabar archivo : " + ioe.toString());
+//         }
+//        }
+//}

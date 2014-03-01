@@ -38,15 +38,12 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private Image game_over;        //Imagen de Game-over
     private int direccion;          //Variable para la dirección del personaje
     private int score;
-    private boolean flag;
     private boolean move;
     private boolean pausa;
     private long tiempoActual;
     private double z; //posición y
-    private double z0; //posición y inicial
     private double vz0; //velocidad y inicial;
     private double x;// posición x;
-    private double x0; //posicion x inicial;
     private double vx0; //velocidad x inicial ;
     private double velocidadInicial;
     private double tiempo;
@@ -78,15 +75,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
         contvidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
-        flag = false;
-        int posY = getHeight() / 2;             // posicion inicial del planeta en y
-
         payaso = new SoundClip("sounds/pashaso.wav");
-
-        URL eURL = this.getClass().getResource("bueno/link1.png");
         link = new Bueno(0, 290);
-
-        URL aURL = this.getClass().getResource("malo/mano1.png");
         mano = new Malo(getWidth() / 2, getHeight() - 55);
 
         setBackground(Color.black);
@@ -95,7 +85,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         addMouseMotionListener(this);
         //Se cargan los sonidos.
         z = 290;
-        z0 = 0;
         angulo = 45;
         velocidadInicial = (int) (Math.random() * (54) + 54);
         //se aplica la fórmula v0=v0.senθ
@@ -103,10 +92,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         //se aplica la fórmula v0=v0.cosθ
         vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
         x = 10;
-        x0 = 0;
         tiempo = 0;
         puedoDisparar = false;
-
         URL goURL = this.getClass().getResource("malo/gameover.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
         instrucciones = false;
@@ -187,7 +174,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         } else {
             z = 290;
-            z0 = 0;
             angulo = 45;
             velocidadInicial = (int) (Math.random() * (54) + 54);;
             //se aplica la fórmula v0=v0.senθ
@@ -195,7 +181,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             //se aplica la fórmula v0=v0.cosθ
             vx0 = velocidadInicial * Math.cos(Math.toRadians(angulo));
             x = 10;
-            x0 = 0;
             tiempo = 0;
         }
         if (move) {
@@ -252,13 +237,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             mano.setPosX(getWidth() - mano.getAncho());
         }
 
-        if (mano.intersecta(link) && !(mano.intersec(link))) {
-            flag = true;
-
-        } else if (!(mano.intersecta(link)) && flag) {
-            flag = false;
-
-        } else if (!(flag) && mano.intersec(link)) {
+         if (mano.intersecta(link)) {
             link.setPosY(getHeight() / 2);
             puedoDisparar = false;
             link.setPosX(0);

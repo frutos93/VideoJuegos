@@ -16,9 +16,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JFrameExamen extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -50,6 +53,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private boolean puedoDisparar;
     private int angulo;
     private boolean instrucciones;
+    private final String nombreArchivo = "savedState.txt";
+    ;
     
     private boolean puedoGrabar;
 
@@ -66,7 +71,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
     public void init() {
         setSize(800, 500);
-
         pausa = false;
         move = false;
         musicafondo = false;
@@ -320,8 +324,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         } else if (e.getKeyCode() == KeyEvent.VK_I) {
             instrucciones = !instrucciones;
+        } else if (e.getKeyCode() == KeyEvent.VK_C) {
+            cargarArchivo();
         }
-
     }
 
     public void keyTyped(KeyEvent e) {
@@ -434,37 +439,70 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void grabaArchivo() {
 
         try {
-            File file = new File("savedState.txt");
-            if(file.exists()){
+            File file = new File(nombreArchivo);
+            if (file.exists()) {
                 file.delete();
             }
             file.createNewFile();
             Vector datos = new Vector();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            datos.add(link.getPosX());
-            datos.add(link.getPosY());
-            if (link.getMoviendose()) {
-                datos.add(1);
-            } else {
-                datos.add(0);
-            }
-            datos.add(vz0);
-            datos.add(vx0);
-            datos.add(mano.getPosX());
-            datos.add(mano.getPosY());
-            datos.add(contvidas);
-            datos.add(vidas);
-            datos.add(score);
+            try (BufferedWriter bw = new BufferedWriter(fw)) {
+                datos.add(link.getPosX());
+                datos.add(link.getPosY());
+                if (link.getMoviendose()) {
+                    datos.add(1);
+                } else {
+                    datos.add(0);
+                }
+                datos.add(vz0);
+                datos.add(vx0);
+                datos.add(mano.getPosX());
+                datos.add(mano.getPosY());
+                datos.add(contvidas);
+                datos.add(vidas);
+                datos.add(score);
 
-            for (Object i : datos) {
-                bw.write("" + i + "\n");
+                for (Object i : datos) {
+                    bw.write("" + i + "\n");
+                }
+                puedoGrabar = false;
             }
-            bw.close();
 
         } catch (IOException ioe) {
             System.out.println(" Se obtuvo error al grabar archivo : " + ioe.toString());
         }
-        puedoGrabar = false;
+    }
+
+    public void cargarArchivo() {
+        BufferedReader br;
+        try {
+            File file = new File(nombreArchivo);
+            if(!file.exists())
+                return;
+            br = new BufferedReader(new FileReader(file));
+            Vector datos = new Vector();
+            for (String line; (line = br.readLine()) != null;) {
+                datos.add(Integer.valueOf(line));
+            }
+            for (Object i : datos) {
+                System.out.println(i);
+            }
+            link.setPosX((int) datos.get(0));
+            link.setPosY((int) datos.get(1));
+            link.setMoviendose((int) datos.get(2) == 1);
+            vz0 = (int) datos.get(3);
+            vx0 = (int) datos.get(4);
+            mano.setPosX((int) datos.get(5));
+            mano.setPosY((int) datos.get(6));
+            contvidas = (int) datos.get(7);
+            vidas = (int) datos.get(8);
+            score = (int) datos.get(9);
+            br.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JFrameExamen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(JFrameExamen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

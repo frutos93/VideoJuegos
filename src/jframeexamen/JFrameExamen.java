@@ -38,7 +38,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private Malo mano;   //Objeto de la clase Raton
     private boolean musicafondo;
     private int vidas;
-    private int contvidas;
+    private int contVidas;
     private Image game_over;        //Imagen de Game-over
     private int direccion;          //Variable para la dirección del personaje
     private int score;
@@ -55,11 +55,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private int angulo;
     private boolean instrucciones;
     private final String nombreArchivo = "savedState.txt";
-    private int rand;
-    ;
-    
+    private int rand;       
     private boolean puedoGrabar;
-    private int rand;
 
     /**
      * Constructor vacio de la clase <code>JFrameExamen</code>.
@@ -97,7 +94,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z = 290;
         angulo = 45;
         Random r = new Random();
-        rand = r.nextInt(108 - 65) + 65;
+        rand = r.nextInt(108 - 75) + 75;
         velocidadInicial = (int) rand;
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
@@ -192,7 +189,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             z = 290;
             angulo = 45;
             Random r = new Random();
-            rand = r.nextInt(108 - 65) + 65;
+            rand = r.nextInt(108 - 75) + 75;
             velocidadInicial = (int) rand;
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));

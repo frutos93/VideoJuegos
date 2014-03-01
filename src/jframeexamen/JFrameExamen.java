@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Random;
 
 public class JFrameExamen extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -51,9 +52,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private int angulo;
     private boolean instrucciones;
     private final String nombreArchivo = "savedState.txt";
-    ;
-    
     private boolean puedoGrabar;
+    private int rand;
+    
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -78,7 +79,6 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         payaso = new SoundClip("sounds/pashaso.wav");
         link = new Bueno(0, 290);
         mano = new Malo(getWidth() / 2, getHeight() - 55);
-
         setBackground(Color.black);
         addKeyListener(this);
         addMouseListener(this);
@@ -86,7 +86,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         //Se cargan los sonidos.
         z = 290;
         angulo = 45;
-        velocidadInicial = (int) (Math.random() * (54) + 54);
+        Random r = new Random();
+        rand = r.nextInt(108-65) + 65;
+        velocidadInicial = (int) rand;
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -98,15 +100,12 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
         instrucciones = false;
         puedoGrabar = true;
-
     }
 
     /**
-     * Metodo <I>run</I> sobrescrito de la clase <code>Thread</code>.<P>
-     * En este metodo se ejecuta el hilo, es un ciclo indefinido donde se
-     * incrementa la posicion en x o y dependiendo de la direccion, finalmente
-     * se repinta el <code>Applet</code> y luego manda a dormir el hilo.
-     *
+     * Metodo <I>Start</I> sobrescrito de la clase <code>Thread</code>.<P>
+     * Este metodo comienza la ejecucion del hilo. Esto llama al metodo
+     * <code>run</code>
      */
     public void start() {
         // Declaras un hilo
@@ -117,6 +116,13 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         th.start();
     }
 
+    /**
+     * Metodo <I>run</I> sobrescrito de la clase <code>Thread</code>.<P>
+     * En este metodo se ejecuta el hilo, es un ciclo indefinido donde se
+     * incrementa la posicion en x o y dependiendo de la direccion, finalmente
+     * se repinta el <code>Applet</code> y luego manda a dormir el hilo.
+     *
+     */
     public void run() {
         tiempoActual = System.currentTimeMillis();
         while (vidas > 0) {
@@ -175,7 +181,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         } else {
             z = 290;
             angulo = 45;
-            velocidadInicial = (int) (Math.random() * (54) + 54);;
+            Random r = new Random();
+            rand = r.nextInt(108-65) + 65;
+            velocidadInicial = (int) rand;
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
             //se aplica la fórmula v0=v0.cosθ
@@ -237,7 +245,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             mano.setPosX(getWidth() - mano.getAncho());
         }
 
-         if (mano.intersecta(link)) {
+        if (mano.intersecta(link)) {
             link.setPosY(getHeight() / 2);
             puedoDisparar = false;
             link.setPosX(0);
@@ -441,19 +449,18 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 datos.add(vidas);
                 datos.add(score);
                 datos.add(velocidadInicial);
-                if(move){
+                if (move) {
                     datos.add(1);
-                } else{
+                } else {
                     datos.add(0);
                 }
                 datos.add(tiempo);
                 datos.add(angulo);
-                if(puedoDisparar){
+                if (puedoDisparar) {
                     datos.add(1);
-                } else{
+                } else {
                     datos.add(0);
                 }
-                
 
                 for (Object i : datos) {
                     bw.write("" + i + "\n");
@@ -481,7 +488,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 }
                 datos.add(Double.valueOf(line).intValue());
             }
-                
+
             link.setPosX((int) datos.get(0));
             link.setPosY((int) datos.get(1));
             link.setMoviendose((int) datos.get(2) == 1);
@@ -493,10 +500,10 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             vidas = (int) datos.get(8);
             score = (int) datos.get(9);
             velocidadInicial = (int) datos.get(10);
-            move = ((int)datos.get(11) == 1);
-            tiempo =(int) datos.get(12);
+            move = ((int) datos.get(11) == 1);
+            tiempo = (int) datos.get(12);
             angulo = (int) datos.get(13);
-            puedoDisparar = ((int) datos.get(14) == 1 );
+            puedoDisparar = ((int) datos.get(14) == 1);
             br.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(JFrameExamen.class.getName()).log(Level.SEVERE, null, ex);

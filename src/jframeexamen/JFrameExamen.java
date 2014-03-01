@@ -6,22 +6,16 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
-import java.util.LinkedList;
-import javax.swing.JOptionPane;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.util.Vector;
@@ -32,36 +26,19 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     // Se declaran las variables. 
     private Image dbImage;	// Imagen a proyectar	
     private Graphics dbg;	// Objeto grafico
-    private SoundClip sonido;    // Objeto AudioClip
-    private SoundClip bomb;    //Objeto AudioClip
     private SoundClip payaso;
     private Bueno link;    // Objeto de la clase Elefante
     private Malo mano;   //Objeto de la clase Raton
-    private LinkedList lista;           //lista de ratones
-    private int cant;               //cantidad de asteroides
-    private boolean presionado;     //Boleano que controla si el bot´´oon está siendo presionado
     private boolean musicafondo;
-    private int coordenada_x;
-    private int coordenada_y;
-    private int off_x;              //Coordenada para ajustar la imagen con click
-    private int off_y;              //Coordenada para ajustar la imagen con click 
     private int vidas;
     private int contvidas;
     private Image game_over;        //Imagen de Game-over
     private int direccion;          //Variable para la dirección del personaje
-    private int posrX;
-    private int posrY;
     private int score;
-    private int cont;
-    private int x_mayor;
-    private int x_menor;
-    private int y_mayor;
-    private int y_menor;
     private boolean flag;
     private boolean move;
     private boolean pausa;
     private long tiempoActual;
-    private String nombreArchivo;
     private double z; //posición y
     private double z0; //posición y inicial
     private double vz0; //velocidad y inicial;
@@ -97,16 +74,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
         contvidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
-        cont = 0;                     //contadaor que indica cuantos asteroides han golpeado el fondo del applet
-        x_mayor = (getWidth() - getWidth() / 10);           //posicion máxima en x que tendrán los asteroides
-        x_menor = 0;           //posicion mínima en x que tendrán los asteroides
-        y_mayor = -100;          //posicion máxima en y que tendrán los asteroides
-        y_menor = -200;        //posicion mínima en y que tendrán los asteroides
         flag = false;
         int posY = getHeight() / 2;             // posicion inicial del planeta en y
 
-        bomb = new SoundClip("sounds/Explosion.wav");
-        sonido = new SoundClip("sounds/boom.wav");
         payaso = new SoundClip("sounds/pashaso.wav");
 
         URL eURL = this.getClass().getResource("bueno/link1.png");
@@ -132,7 +102,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         x0 = 0;
         tiempo = 0;
         puedoDisparar = false;
-        lista = new LinkedList();
+
         URL goURL = this.getClass().getResource("malo/gameover.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
         instrucciones = false;
@@ -483,6 +453,10 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             datos.add(vx0);
             datos.add(mano.getPosX());
             datos.add(mano.getPosY());
+            datos.add(contvidas);
+            datos.add(vidas);
+            datos.add(score);
+
             for (Object i : datos) {
                 bw.write("" + i + "\n");
             }

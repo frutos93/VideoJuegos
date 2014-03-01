@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Color;
+import java.util.Random;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -51,6 +52,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private int angulo;
     private boolean instrucciones;
     private final String nombreArchivo = "savedState.txt";
+    private int rand;
     ;
     
     private boolean puedoGrabar;
@@ -86,7 +88,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         //Se cargan los sonidos.
         z = 290;
         angulo = 45;
-        velocidadInicial = (int) (Math.random() * (54) + 54);
+        Random r = new Random();
+        rand = r.nextInt(108 - 65) + 65;
+        velocidadInicial = (int) (rand);
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -175,7 +179,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         } else {
             z = 290;
             angulo = 45;
-            velocidadInicial = (int) (Math.random() * (54) + 54);;
+            Random a = new Random();
+            rand = a.nextInt(108 - 65) + 65;
+            velocidadInicial = (int) (rand);
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
             //se aplica la fórmula v0=v0.cosθ

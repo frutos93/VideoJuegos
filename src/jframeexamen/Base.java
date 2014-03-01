@@ -1,6 +1,5 @@
 package jframeexamen;
 
-
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -10,11 +9,12 @@ public class Base {
     private int posX;    //posicion en x.       
     private int posY;	//posicion en y.
     protected Animacion animacion;    //icono.
+    private boolean moviendose;     //Booleano utilizado para saber si el objeto se esta moviendo
 
     public Base(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
-
+        moviendose = false;
     }
 
     public void setPosX(int posX) {
@@ -70,8 +70,18 @@ public class Base {
     public boolean intersec(Base obj) {
         return getPerimetro().intersects(obj.getRect());
     }
-    
-    public void actualiza(long t){
-        animacion.actualiza(t);
+
+    public void actualiza(long t) {
+        if (moviendose) {
+            animacion.actualiza(t);
+        }
+    }
+
+    public boolean getMoviendose() {
+        return moviendose;
+    }
+
+    public void setMoviendose(boolean m) {
+        moviendose = m;
     }
 }

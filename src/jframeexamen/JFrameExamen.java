@@ -90,7 +90,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         direccion = 0;
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
-        contvidas=0;                    //contador de vidas, cada 3 puntos se restará una vida
+        contvidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
         cont = 0;                     //contadaor que indica cuantos asteroides han golpeado el fondo del applet
         x_mayor = (getWidth() - getWidth() / 10);           //posicion máxima en x que tendrán los asteroides
         x_menor = 0;           //posicion mínima en x que tendrán los asteroides
@@ -105,24 +105,19 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         URL eURL = this.getClass().getResource("bueno/link1.png");
         link = new Bueno(0, 290);
-        
-        URL aURL= this.getClass().getResource("malo/mano1.png");
-        mano = new Malo(getWidth()/2,getHeight()-55);
-        
+
+        URL aURL = this.getClass().getResource("malo/mano1.png");
+        mano = new Malo(getWidth() / 2, getHeight() - 55);
+
         setBackground(Color.black);
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
         //Se cargan los sonidos.
-
-        //URL beURL = this.getClass().getResource("sounds/boom.wav");
-        //sonido = getAudioClip(beURL);
-        //URL baURL = this.getClass().getResource("sounds/Explosion.wav");
-        //bomb = getAudioClip(baURL);
         z = 290;
         z0 = 0;
         angulo = 45;
-        velocidadInicial=(int)(Math.random()*(54)+54);
+        velocidadInicial = (int) (Math.random() * (54) + 54);
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
         //se aplica la fórmula v0=v0.cosθ
@@ -195,6 +190,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         tiempo += incrementoTiempo;    //actualizar el tiempo y la nueva posicion.
 
         if (puedoDisparar) {
+            link.setMoviendose(true);
             link.setPosX((int) x);
             link.setPosY((int) z);
             //se aplica la fórmula x= v0.cosθ.t
@@ -211,7 +207,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             z = 290;
             z0 = 0;
             angulo = 45;
-            velocidadInicial=(int)(Math.random()*(54)+54);;
+            velocidadInicial = (int) (Math.random() * (54) + 54);;
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
             //se aplica la fórmula v0=v0.cosθ
@@ -220,7 +216,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             x0 = 0;
             tiempo = 0;
         }
-   if (move) {
+        if (move) {
+            mano.setMoviendose(true);
             switch (direccion) {
                 case 3: {
                     mano.setPosX(mano.getPosX() - 3);
@@ -247,15 +244,16 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         }
 
         if (link.getPosY() + link.getAlto() > getHeight()) {
-            link.setPosY(getHeight()/2);
+            link.setPosY(getHeight() / 2);
             puedoDisparar = false;
             contvidas++;
-            if(contvidas==3){
+            if (contvidas == 3) {
                 vidas--;
-                contvidas=0;
+                contvidas = 0;
             }
             link.setPosX(0);
             link.setPosY(290);
+            link.setMoviendose(false);
         }
 
         if (link.getPosX() < 0) {
@@ -265,28 +263,28 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         if (link.getPosX() + link.getAncho() > getWidth()) {
             link.setPosX(getWidth() - link.getAncho());
         }
-       if (mano.getPosX() < 0) {
-            mano.setPosX(0);
+        if (mano.getPosX() < getWidth() / 2) {
+            mano.setPosX(getWidth() / 2);
         }
-       if (mano.getPosX() + mano.getAncho() > getWidth()) {
+        if (mano.getPosX() + mano.getAncho() > getWidth()) {
             mano.setPosX(getWidth() - mano.getAncho());
         }
-       
-       
-            if (mano.intersecta(link) && !(mano.intersec(link))) {
-                flag = true;
 
-            } else if (!(mano.intersecta(link)) && flag) {
-                flag = false;
+        if (mano.intersecta(link) && !(mano.intersec(link))) {
+            flag = true;
 
-            } else if (!(flag) && mano.intersec(link)) {
-                link.setPosY(getHeight()/2);
-                puedoDisparar = false;
-                link.setPosX(0);
-                link.setPosY(290);
-                score=score+100;
+        } else if (!(mano.intersecta(link)) && flag) {
+            flag = false;
 
-            }
+        } else if (!(flag) && mano.intersec(link)) {
+            link.setPosY(getHeight() / 2);
+            puedoDisparar = false;
+            link.setPosX(0);
+            link.setPosY(290);
+            score = score + 100;
+            link.setMoviendose(false);
+
+        }
 
     }
 
@@ -329,6 +327,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             direccion = 3;
+
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 
             direccion = 4;
@@ -359,7 +358,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      * convierte en falsa.
      */
     public void keyReleased(KeyEvent e) {
-            move = false;
+        move = false;
+        mano.setMoviendose(false);
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -422,7 +422,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
      */
     public void paint1(Graphics g) {
         if (vidas > 0) {
-            if (link != null && mano!= null ) {
+            if (link != null && mano != null) {
                 g.drawImage(link.getImagenI(), link.getPosX(), link.getPosY(), this);
                 g.drawImage(mano.getImagenI(), mano.getPosX(), mano.getPosY(), this);
                 g.setColor(Color.white);

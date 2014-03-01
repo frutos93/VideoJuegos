@@ -461,6 +461,20 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 datos.add(contvidas);
                 datos.add(vidas);
                 datos.add(score);
+                datos.add(velocidadInicial);
+                if(move){
+                    datos.add(1);
+                } else{
+                    datos.add(0);
+                }
+                datos.add(tiempo);
+                datos.add(angulo);
+                if(puedoDisparar){
+                    datos.add(1);
+                } else{
+                    datos.add(0);
+                }
+                
 
                 for (Object i : datos) {
                     bw.write("" + i + "\n");
@@ -477,16 +491,18 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         BufferedReader br;
         try {
             File file = new File(nombreArchivo);
-            if(!file.exists())
+            if (!file.exists()) {
                 return;
+            }
             br = new BufferedReader(new FileReader(file));
             Vector datos = new Vector();
             for (String line; (line = br.readLine()) != null;) {
-                datos.add(Integer.valueOf(line));
+                if (line.isEmpty()) {
+                    break;
+                }
+                datos.add(Double.valueOf(line).intValue());
             }
-            for (Object i : datos) {
-                System.out.println(i);
-            }
+                
             link.setPosX((int) datos.get(0));
             link.setPosY((int) datos.get(1));
             link.setMoviendose((int) datos.get(2) == 1);
@@ -497,6 +513,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             contvidas = (int) datos.get(7);
             vidas = (int) datos.get(8);
             score = (int) datos.get(9);
+            velocidadInicial = (int) datos.get(10);
+            move = ((int)datos.get(11) == 1);
+            tiempo =(int) datos.get(12);
+            angulo = (int) datos.get(13);
+            puedoDisparar = ((int) datos.get(14) == 1 );
             br.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(JFrameExamen.class.getName()).log(Level.SEVERE, null, ex);

@@ -30,17 +30,17 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     // Se declaran las variables. 
     private Image dbImage;	// Imagen a proyectar	
     private Graphics dbg;	// Objeto grafico
-    private SoundClip payaso;
-    private Bueno link;    // Objeto de la clase Elefante
-    private Malo mano;   //Objeto de la clase Raton
-    private boolean musicafondo;
-    private int vidas;
-    private int contvidas;
-    private Image game_over;        //Imagen de Game-over
-    private int direccion;          //Variable para la dirección del personaje
-    private int score;
-    private boolean move;
-    private boolean pausa;
+    private SoundClip payaso;   // Musica de fondo
+    private Bueno link;         // Objeto de la clase Elefante
+    private Malo mano;          // Objeto de la clase Raton
+    private boolean musicafondo;// Indica si la musica de fondo se encuentra corriendo o no
+    private int vidas;          // Cantidad de vidas del jugador
+    private int contVidas;      // Cantidad de veces que el personaje ha caido
+    private Image game_over;    // Imagen de Game-over
+    private int direccion;      // Variable para la dirección del personaje
+    private int score;          // Variable de puntuacion
+    private boolean move;       // Variable utilizada para indicar si el objeto (receptor) se esta moviendo
+    private boolean pausa;      // Variable utilizada para saber si el juego se encuentra pausado
     private long tiempoActual;
     private double z; //posición y
     private double vz0; //velocidad y inicial;
@@ -54,12 +54,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private final String nombreArchivo = "savedState.txt";
     private boolean puedoGrabar;
     private int rand;
-    
 
     /**
-     * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
-     * En este metodo se inizializan las variables o se crean los objetos a
-     * usarse en el <code>Applet</code> y se definen funcionalidades.
+     * Constructor vacio de la clase <code>JFrameExamen</code>.
      */
     public JFrameExamen() {
         init();
@@ -67,6 +64,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
+     * En este metodo se inizializan las variables o se crean los objetos a
+     * usarse en el <code>Applet</code> y se definen funcionalidades.
+     */
     public void init() {
         setSize(800, 500);
         pausa = false;
@@ -75,7 +77,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         direccion = 0;
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
-        contvidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
+        contVidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
         payaso = new SoundClip("sounds/pashaso.wav");
         link = new Bueno(0, 290);
         mano = new Malo(getWidth() / 2, getHeight() - 55);
@@ -87,7 +89,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         z = 290;
         angulo = 45;
         Random r = new Random();
-        rand = r.nextInt(108-65) + 65;
+        rand = r.nextInt(108 - 65) + 65;
         velocidadInicial = (int) rand;
         //se aplica la fórmula v0=v0.senθ
         vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
@@ -182,7 +184,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             z = 290;
             angulo = 45;
             Random r = new Random();
-            rand = r.nextInt(108-65) + 65;
+            rand = r.nextInt(108 - 65) + 65;
             velocidadInicial = (int) rand;
             //se aplica la fórmula v0=v0.senθ
             vz0 = velocidadInicial * Math.sin(Math.toRadians(angulo));
@@ -221,10 +223,10 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         if (link.getPosY() + link.getAlto() > getHeight()) {
             link.setPosY(getHeight() / 2);
             puedoDisparar = false;
-            contvidas++;
-            if (contvidas == 3) {
+            contVidas++;
+            if (contVidas == 3) {
                 vidas--;
-                contvidas = 0;
+                contVidas = 0;
             }
             link.setPosX(0);
             link.setPosY(290);
@@ -334,6 +336,15 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         }
     }
 
+    /**
+     * Metodo <I>mouseClicked</I> sobrescrito de la clase
+     * <code>MouseEvent</code>.
+     * <P>
+     * Este metodo es invocado cuando se ha presionado un boton del mouse en un
+     * componente.
+     *
+     * @param e es el evento generado al ocurrir lo descrito.
+     */
     public void mouseClicked(MouseEvent e) {
         if (!puedoDisparar) {
             if (link.contiene(e.getX(), e.getY())) {
@@ -371,6 +382,14 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void mouseReleased(MouseEvent e) {
     }
 
+    /**
+     * Metodo <I>mouseReleased</I> sobrescrito de la clase
+     * <code>MouseEvent</code>.<P>
+     * Este metodo es invocado cuando el cursor es movido dentro de un
+     * componente sin presionar ningun boton.
+     *
+     * @param e es el evento generado al ocurrir lo descrito.
+     */
     public void mouseMoved(MouseEvent e) {
 
     }
@@ -378,15 +397,17 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     /**
      * Metodo <I>mouseDragged</I> sobrescrito de la clase
      * <code>MouseEvent</code>.<P>
-     * En este método se actualiza las posiciones de 'x' y de 'y'hacia dónde ha
-     * sido arrastrado el mouse
+     * Este metodo es invocado cuando se presiona un boton en un componente, y
+     * luego este es arrastrado.
+     *
+     * @param e es el evento generado al ocurrir lo descrito.
      */
     public void mouseDragged(MouseEvent e) {
     }
 
     /**
-     * Metodo <I>paint</I> sobrescrito de la clase <code>Applet</code>, heredado
-     * de la clase Container.<P>
+     * Metodo <I>paint1</I> sobrescrito de la clase <code>Applet</code>,
+     * heredado de la clase Container.<P>
      * En este metodo se dibuja la imagen con la posicion actualizada, ademas
      * que cuando la imagen es cargada te despliega una advertencia.
      *
@@ -423,6 +444,10 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         }
     }
 
+    /**
+     * Metodo <I>grabaArchivo</I> utilizado para grabar los datos del juego en
+     * un archivo con extension <I>.txt</I>
+     */
     public void grabaArchivo() {
 
         try {
@@ -445,7 +470,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 datos.add(vx0);
                 datos.add(mano.getPosX());
                 datos.add(mano.getPosY());
-                datos.add(contvidas);
+                datos.add(contVidas);
                 datos.add(vidas);
                 datos.add(score);
                 datos.add(velocidadInicial);
@@ -473,6 +498,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         }
     }
 
+    /**
+     * Metodo <I>cargarArchivo</I> utilizado para cargar los datos que fueron
+     * grabados la ultima vez que se jugo. El archivo tiene extension
+     * <I>.txt</I>
+     */
     public void cargarArchivo() {
         BufferedReader br;
         try {
@@ -496,7 +526,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             vx0 = (int) datos.get(4);
             mano.setPosX((int) datos.get(5));
             mano.setPosY((int) datos.get(6));
-            contvidas = (int) datos.get(7);
+            contVidas = (int) datos.get(7);
             vidas = (int) datos.get(8);
             score = (int) datos.get(9);
             velocidadInicial = (int) datos.get(10);

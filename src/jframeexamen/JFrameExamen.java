@@ -69,6 +69,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private double tiempo;
     private boolean puedoDisparar;
     private int angulo;
+    private boolean instrucciones;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -129,6 +130,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         lista = new LinkedList();
         URL goURL = this.getClass().getResource("malo/gameover.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
+        instrucciones = false;
 
     }
 
@@ -327,23 +329,22 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             direccion = 3;
-
+            move = true;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 
             direccion = 4;
-
+            move = true;
         } else if (e.getKeyCode() == KeyEvent.VK_P) {
             pausa = !pausa;
+        } else if (e.getKeyCode() == KeyEvent.VK_S && !pausa) {
+            musicafondo = !musicafondo;
 
-        } else if (e.getKeyCode() == KeyEvent.VK_S) {
-            if (!musicafondo) {
-                musicafondo = true;
-            } else {
-                musicafondo = false;
-            }
+        } else if (e.getKeyCode() == KeyEvent.VK_C) {
+            //cargar
 
+        } else if (e.getKeyCode() == KeyEvent.VK_I) {
+            instrucciones = !instrucciones;
         }
-        move = true;
 
     }
 
@@ -431,6 +432,14 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 if (pausa) {
                     g.setColor(Color.white);
                     g.drawString(link.getPausado(), link.getPosX() + link.getAncho() / 3, link.getPosY() + link.getAlto() / 2);
+                }
+                if (instrucciones) {
+                    g.drawString("Instrucciones:", 20, 90);
+                    g.drawString("Haz click en el personaje para lanzarlo. Tu objetivo es atraparlo con la mano. Si lo haces, obtendras puntos.", 20, 110);
+                    g.drawString("Para mover la mano, presiona las teclas de flecha izquierda o derecha.", 20, 130);
+                    g.drawString("Presiona G para guardar tu partida, C para cargar y P para pausar", 20, 150);
+                    g.drawString("Si el personaje cae tres veces, perderas una vida y la dificultad aumentara.", 20, 170);
+                    
                 }
             } else {
                 //Da un mensaje mientras se carga el dibujo	

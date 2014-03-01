@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Color;
+import java.util.Random;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,17 +31,19 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     // Se declaran las variables. 
     private Image dbImage;	// Imagen a proyectar	
     private Graphics dbg;	// Objeto grafico
-    private SoundClip payaso;   // Musica de fondo
-    private Bueno link;         // Objeto de la clase Elefante
-    private Malo mano;          // Objeto de la clase Raton
-    private boolean musicafondo;// Indica si la musica de fondo se encuentra corriendo o no
-    private int vidas;          // Cantidad de vidas del jugador
-    private int contVidas;      // Cantidad de veces que el personaje ha caido
-    private Image game_over;    // Imagen de Game-over
-    private int direccion;      // Variable para la dirección del personaje
-    private int score;          // Variable de puntuacion
-    private boolean move;       // Variable utilizada para indicar si el objeto (receptor) se esta moviendo
-    private boolean pausa;      // Variable utilizada para saber si el juego se encuentra pausado
+    private SoundClip payaso;
+    private SoundClip snake;
+    private SoundClip waka;
+    private Bueno link;    // Objeto de la clase Elefante
+    private Malo mano;   //Objeto de la clase Raton
+    private boolean musicafondo;
+    private int vidas;
+    private int contvidas;
+    private Image game_over;        //Imagen de Game-over
+    private int direccion;          //Variable para la dirección del personaje
+    private int score;
+    private boolean move;
+    private boolean pausa;
     private long tiempoActual;
     private double z; //posición y
     private double vz0; //velocidad y inicial;
@@ -52,6 +55,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private int angulo;
     private boolean instrucciones;
     private final String nombreArchivo = "savedState.txt";
+    private int rand;
+    ;
+    
     private boolean puedoGrabar;
     private int rand;
 
@@ -79,6 +85,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         vidas = 5;                    //vidaas iniciales
         contVidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
         payaso = new SoundClip("sounds/pashaso.wav");
+        snake= new SoundClip("sounds/snake.wav");
+        waka= new SoundClip("sounds/waka.wav");
         link = new Bueno(0, 290);
         mano = new Malo(getWidth() / 2, getHeight() - 55);
         setBackground(Color.black);
@@ -98,7 +106,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         x = 10;
         tiempo = 0;
         puedoDisparar = false;
-        URL goURL = this.getClass().getResource("malo/gameover.jpg");
+        URL goURL = this.getClass().getResource("malo/creditos.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
         instrucciones = false;
         puedoGrabar = true;
@@ -228,6 +236,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 vidas--;
                 contVidas = 0;
             }
+            if(!musicafondo){
+            snake.play();
+            }
             link.setPosX(0);
             link.setPosY(290);
             link.setMoviendose(false);
@@ -249,6 +260,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
         if (mano.intersecta(link)) {
             link.setPosY(getHeight() / 2);
+            if(!musicafondo){
+                waka.play();
+            }
             puedoDisparar = false;
             link.setPosX(0);
             link.setPosY(290);

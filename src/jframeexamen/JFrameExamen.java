@@ -31,6 +31,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private Image dbImage;	// Imagen a proyectar	
     private Graphics dbg;	// Objeto grafico
     private SoundClip payaso;
+    private SoundClip snake;
+    private SoundClip waka;
     private Bueno link;    // Objeto de la clase Elefante
     private Malo mano;   //Objeto de la clase Raton
     private boolean musicafondo;
@@ -78,6 +80,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         vidas = 5;                    //vidaas iniciales
         contvidas = 0;                    //contador de vidas, cada 3 puntos se restará una vida
         payaso = new SoundClip("sounds/pashaso.wav");
+        snake= new SoundClip("sounds/snake.wav");
+        waka= new SoundClip("sounds/waka.wav");
         link = new Bueno(0, 290);
         mano = new Malo(getWidth() / 2, getHeight() - 55);
 
@@ -98,7 +102,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         x = 10;
         tiempo = 0;
         puedoDisparar = false;
-        URL goURL = this.getClass().getResource("malo/gameover.jpg");
+        URL goURL = this.getClass().getResource("malo/creditos.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
         instrucciones = false;
         puedoGrabar = true;
@@ -224,6 +228,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 vidas--;
                 contvidas = 0;
             }
+            if(!musicafondo){
+            snake.play();
+            }
             link.setPosX(0);
             link.setPosY(290);
             link.setMoviendose(false);
@@ -245,6 +252,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
 
          if (mano.intersecta(link)) {
             link.setPosY(getHeight() / 2);
+            if(!musicafondo){
+                waka.play();
+            }
             puedoDisparar = false;
             link.setPosX(0);
             link.setPosY(290);

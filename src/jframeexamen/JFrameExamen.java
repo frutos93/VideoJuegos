@@ -43,6 +43,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private int off_x;              //Coordenada para ajustar la imagen con click
     private int off_y;              //Coordenada para ajustar la imagen con click 
     private int vidas;
+    private int contvidas;
     private Image game_over;        //Imagen de Game-over
     private int direccion;          //Variable para la dirección del personaje
     private int posrX;
@@ -89,6 +90,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         direccion = 0;
         score = 0;                    //puntaje inicial
         vidas = 5;                    //vidaas iniciales
+        contvidas=0;                    //contador de vidas, cada 3 puntos se restará una vida
         cont = 0;                     //contadaor que indica cuantos asteroides han golpeado el fondo del applet
         x_mayor = (getWidth() - getWidth() / 10);           //posicion máxima en x que tendrán los asteroides
         x_menor = 0;           //posicion mínima en x que tendrán los asteroides
@@ -247,6 +249,11 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         if (link.getPosY() + link.getAlto() > getHeight()) {
             link.setPosY(getHeight()/2);
             puedoDisparar = false;
+            contvidas++;
+            if(contvidas==3){
+                vidas--;
+                contvidas=0;
+            }
             link.setPosX(0);
             link.setPosY(290);
         }
@@ -277,6 +284,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 puedoDisparar = false;
                 link.setPosX(0);
                 link.setPosY(290);
+                score=score+100;
 
             }
 
@@ -418,8 +426,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 g.drawImage(link.getImagenI(), link.getPosX(), link.getPosY(), this);
                 g.drawImage(mano.getImagenI(), mano.getPosX(), mano.getPosY(), this);
                 g.setColor(Color.white);
-                g.drawString("Puntos = " + score, 20, 20);
-                g.drawString("Vidas = " + vidas, 20, 50);
+                g.drawString("Puntos = " + score, 20, 50);
+                g.drawString("Vidas = " + vidas, 20, 70);
                 if (pausa) {
                     g.setColor(Color.white);
                     g.drawString(link.getPausado(), link.getPosX() + link.getAncho() / 3, link.getPosY() + link.getAlto() / 2);

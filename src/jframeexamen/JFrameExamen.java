@@ -18,10 +18,13 @@ import javax.swing.JOptionPane;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.util.Vector;
 
 public class JFrameExamen extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -70,6 +73,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     private boolean puedoDisparar;
     private int angulo;
     private boolean instrucciones;
+    
+    private boolean puedoGrabar;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -83,8 +88,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     }
 
     public void init() {
-        nombreArchivo = "datos.txt";
         setSize(800, 500);
+
         pausa = false;
         move = false;
         musicafondo = false;
@@ -131,6 +136,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         URL goURL = this.getClass().getResource("malo/gameover.jpg");
         game_over = Toolkit.getDefaultToolkit().getImage(goURL);
         instrucciones = false;
+        puedoGrabar = true;
 
     }
 
@@ -339,8 +345,8 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
         } else if (e.getKeyCode() == KeyEvent.VK_S && !pausa) {
             musicafondo = !musicafondo;
 
-        } else if (e.getKeyCode() == KeyEvent.VK_C) {
-            //cargar
+        } else if (e.getKeyCode() == KeyEvent.VK_G && puedoGrabar && !instrucciones) {
+            grabaArchivo();
 
         } else if (e.getKeyCode() == KeyEvent.VK_I) {
             instrucciones = !instrucciones;
@@ -361,6 +367,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
     public void keyReleased(KeyEvent e) {
         move = false;
         mano.setMoviendose(false);
+        if (e.getKeyCode() == KeyEvent.VK_G) {
+            puedoGrabar = true;
+        }
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -429,6 +438,7 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                 g.setColor(Color.white);
                 g.drawString("Puntos = " + score, 20, 50);
                 g.drawString("Vidas = " + vidas, 20, 70);
+                g.drawString("Presiona I para ver instrucciones.", getWidth() - 200, 50);
                 if (pausa) {
                     g.setColor(Color.white);
                     g.drawString(link.getPausado(), link.getPosX() + link.getAncho() / 3, link.getPosY() + link.getAlto() / 2);
@@ -437,9 +447,9 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
                     g.drawString("Instrucciones:", 20, 90);
                     g.drawString("Haz click en el personaje para lanzarlo. Tu objetivo es atraparlo con la mano. Si lo haces, obtendras puntos.", 20, 110);
                     g.drawString("Para mover la mano, presiona las teclas de flecha izquierda o derecha.", 20, 130);
-                    g.drawString("Presiona G para guardar tu partida, C para cargar y P para pausar", 20, 150);
+                    g.drawString("Presiona G para guardar tu partida, C para cargar, P para pausar y S para detener la musica.", 20, 150);
                     g.drawString("Si el personaje cae tres veces, perderas una vida y la dificultad aumentara.", 20, 170);
-                    
+
                 }
             } else {
                 //Da un mensaje mientras se carga el dibujo	
@@ -450,27 +460,37 @@ public class JFrameExamen extends JFrame implements Runnable, KeyListener, Mouse
             g.drawImage(game_over, getWidth() / 5, 0, this);
         }
     }
-}
 
-/**
- * Metodo que agrega la informacion del vector al archivo.
- *
- * @throws IOException
- */
-//public void grabaArchivo() {
-//                                                          
-//         try {
-//                PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo),false);
-//                /*for (int i = 0; i < vec.size(); i++) {
-//
-//                    Puntaje x;
-//                    x = (Puntaje) vec.get(i);*/
-//                    fileOut.println(""+velocidadx +","+velocidady+","+angulo+ ","+tiempo+","+vidas);
-//                
-//                fileOut.close();
-//         }
-//         catch (IOException ioe) {
-//             System.out.println(" Se obtuvo error al grabar archivo : " + ioe.toString());
-//         }
-//        }
-//}
+    public void grabaArchivo() {
+
+        try {
+            File file = new File("savedState.txt");
+            if(file.exists()){
+                file.delete();
+            }
+            file.createNewFile();
+            Vector datos = new Vector();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            datos.add(link.getPosX());
+            datos.add(link.getPosY());
+            if (link.getMoviendose()) {
+                datos.add(1);
+            } else {
+                datos.add(0);
+            }
+            datos.add(vz0);
+            datos.add(vx0);
+            datos.add(mano.getPosX());
+            datos.add(mano.getPosY());
+            for (Object i : datos) {
+                bw.write("" + i + "\n");
+            }
+            bw.close();
+
+        } catch (IOException ioe) {
+            System.out.println(" Se obtuvo error al grabar archivo : " + ioe.toString());
+        }
+        puedoGrabar = false;
+    }
+}

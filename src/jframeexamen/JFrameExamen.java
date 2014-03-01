@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Color;
-import java.util.Random;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

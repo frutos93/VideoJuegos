@@ -7,7 +7,10 @@ package jframeexamen;
 
 /**
  *
- * @author Carlos
+ * @author Carlos Frutos A01139463
+ * @author Roberto Ruiz A00813365
+ * @date 28/02/2014
+ * @version 0.1.3
  */
 //Holitos.
 public class Main {
